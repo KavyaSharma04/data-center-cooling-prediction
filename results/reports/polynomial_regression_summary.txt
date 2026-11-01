@@ -1,0 +1,13 @@
+Polynomial regression (degree 2)
+Dataset: results/hourly_median_merged_data.csv
+Chronological split: 70% train / 15% validation / 15% test
+
+Validation:
+MAE: 12.2751 kW
+RMSE: 15.7957 kW
+R²: -0.1287
+
+Test:
+MAE: 10.5365 kW
+RMSE: 13.9797 kW
+R²: -0.0772
