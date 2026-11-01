@@ -10,3 +10,6 @@ results/*
 
 !results/xgboost_ablation_results.csv
 !results/xgboost_ablation_summary.txt
+
+!results/polynomial_regression_summary.txt
+!results/polynomial_regression_test_predictions.csv
