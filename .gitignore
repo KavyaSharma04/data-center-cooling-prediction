@@ -7,3 +7,6 @@ results/*
 !results/median_model_summary.txt
 !results/actual_vs_predicted_median.png
 !results/prediction_errors_over_time.png
+
+!results/xgboost_ablation_results.csv
+!results/xgboost_ablation_summary.txt
