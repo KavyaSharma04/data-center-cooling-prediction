@@ -13,3 +13,5 @@ results/*
 
 !results/polynomial_regression_summary.txt
 !results/polynomial_regression_test_predictions.csv
+
+!results/statistical_comparison.csv
