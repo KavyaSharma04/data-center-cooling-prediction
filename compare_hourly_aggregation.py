@@ -165,11 +165,11 @@ for timestamp in extreme_hours:
 print("\nAggregation comparison completed!")
 # Save the hourly median dataset separately
 median_df.to_csv(
-    "results/hourly_median_merged_data.csv",
+    "results/data/hourly_median_merged_data.csv",
     index=False
 )
 
 print("\nMedian dataset saved successfully!")
-print("File: results/hourly_median_merged_data.csv")
+print("File: results/data/hourly_median_merged_data.csv")
 print("Dataset shape:", median_df.shape)
 print("Columns:", median_df.columns.tolist())

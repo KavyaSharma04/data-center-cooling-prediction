@@ -8,7 +8,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # 1. Load the median-based dataset
 print("Loading median dataset...")
 
-df = pd.read_csv("results/hourly_median_merged_data.csv")
+df = pd.read_csv("results/data/hourly_median_merged_data.csv")
 
 df["hour"] = pd.to_datetime(df["hour"], utc=True)
 df = df.sort_values("hour").reset_index(drop=True)

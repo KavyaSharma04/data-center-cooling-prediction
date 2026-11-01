@@ -1,5 +1,0 @@
-Experiment,Features,Best_iteration,MAE_kW,RMSE_kW,R2
-Full model,"it_power_kw, outdoor_air_temp, outdoor_air_humidity, hour_of_day, day_of_week, month",442,8.632429346520402,12.114147925137473,0.19109926300308733
-No time features,"it_power_kw, outdoor_air_temp, outdoor_air_humidity",497,8.513478575167694,12.175536465461455,0.18288026897469545
-No weather features,"it_power_kw, hour_of_day, day_of_week, month",175,9.11793092440583,12.933626805213152,0.07795920420575253
-No IT power,"outdoor_air_temp, outdoor_air_humidity, hour_of_day, day_of_week, month",0,9.076964141473626,14.036537764220848,-0.085999144109834

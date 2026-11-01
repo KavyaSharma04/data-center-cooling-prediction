@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the median-based dataset
-df = pd.read_csv("results/hourly_median_merged_data.csv")
+df = pd.read_csv("results/data/hourly_median_merged_data.csv")
 
 df["hour"] = pd.to_datetime(df["hour"], utc=True)
 df = df.sort_values("hour").reset_index(drop=True)
