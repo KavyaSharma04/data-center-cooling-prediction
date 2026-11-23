@@ -1,0 +1,17 @@
+Metric,Primary Data Center,C3 HPC Data Center (IF-692)
+Facility Type,Enterprise Hybrid Facility,High-Performance Computing Center
+Data Records (Hours),"73,696","48,567"
+Time Horizon,2016-06-12 to 2025-08-29,2020-07-18 to 2026-01-31
+Mean Power (kW),1497.02,1586.12
+Median Power (kW),1184.52,1475.72
+Standard Deviation (kW),784.50,425.42
+"Interquartile Range (IQR, kW)",887.11,313.96
+Minimum Power (kW),0.10,22.57
+Maximum Power (kW),3896.23,3927.84
+Peak-to-Average Ratio (PAR),2.60,2.48
+Coefficient of Variation (CV),0.5240,0.2682
+Skewness,1.240,0.808
+Kurtosis,0.500,1.915
+Kolmogorov-Smirnov D-stat vs Primary,0.0000 (Reference),0.4610
+KS Test p-value,1.0000,0.0000e+00
+Wasserstein Distance vs Primary (kW),0.00 kW,360.30 kW

@@ -1,0 +1,11 @@
+Model,MAE_kW,RMSE_kW,R2,Family
+Baseline Polynomial Reg,10.5365,13.9797,-0.0772,Classical
+Baseline LightGBM,9.0779,14.0363,-0.086,Tree
+Baseline Time Features (RF),8.8853,12.4926,0.1398,Tree
+Baseline Median,8.7203,12.3609,0.1578,Baseline
+Baseline XGBoost,8.6324,12.1141,0.1911,Tree
+Physics-Guided Ratio GBDT,9.2045,11.5196,0.2686,Physics GBDT
+Dynamic Autoregressive GBDT,3.2829,6.2565,0.7842,Dynamic GBDT
+DL LSTM Sequence Model,2.4973888196014054,4.386709831496168,0.8939312863196773,Deep Learning
+DL Tabular ResNet,2.5845583101908907,3.9851949406185114,0.9124595798495659,Deep Learning
+DL Hybrid Stacking Ensemble,2.4767032316359474,3.8212885434940516,0.919512367943676,Deep Learning

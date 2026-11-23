@@ -1,0 +1,7 @@
+Model Architecture,Pred Cooling Mean (kW),Pred Cooling Median (kW),Pred Cooling Std (kW),Pred Cooling Min (kW),Pred Cooling Max (kW),Implied Cooling Ratio,Implied Mean PUE,PUE Free-Cooling (Twb<55°F),PUE Mechanical Chiller (Twb≥55°F),Economizer Savings Ratio,Physical Validity (%)
+Physics-Guided Ratio Model,13.42,12.56,5.68,1.74,71.27,0.0089,1.0089,1.0085,1.0103,24.5%,100.0%
+Dynamic Autoregressive GBDT,4.38,4.27,0.98,0.98,30.13,0.0030,1.0030,1.0029,1.0033,19.9%,100.0%
+Baseline XGBoost,12.67,11.45,4.65,2.84,41.68,0.0086,1.0086,1.0085,1.0092,16.1%,100.0%
+Baseline LightGBM,10.40,10.37,0.11,10.18,10.83,0.0075,1.0075,1.0077,1.0068,-0.1%,100.0%
+Baseline Random Forest,12.57,11.43,4.60,3.16,62.67,0.0086,1.0086,1.0084,1.0091,15.0%,100.0%
+Baseline Time Features (RF),12.53,11.20,4.68,3.18,37.98,0.0085,1.0085,1.0084,1.0090,14.6%,100.0%
