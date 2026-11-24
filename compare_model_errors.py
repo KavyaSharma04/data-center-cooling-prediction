@@ -10,7 +10,6 @@ files = {
     "Polynomial Regression": "results/tables/polynomial_regression_test_predictions.csv",
     "Time Features": "results/time_features_test_predictions.csv",
     "XGBoost": "results/xgboost_test_predictions.csv",
-    "Physics-Guided Ratio": "results/improved_ratio_test_predictions.csv",
     "Dynamic Autoregressive": "results/improved_dynamic_test_predictions.csv",
     "DL LSTM": "results/dl_lstm_test_predictions.csv",
     "DL Tabular ResNet": "results/dl_resnet_test_predictions.csv",
