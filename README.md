@@ -27,10 +27,14 @@ data-center/
 │   └── cross_dataset_validation.py # Tests model transfer on unseen C3 Supercomputer data
 │
 ├── 🤖 Model Training:
-│   ├── reproduce_colab_experiment.py # Cleans and merges raw server & weather data
+│   ├── compare_hourly_aggregation.py # Ingests, cleans, and merges raw server & weather telemetry
 │   ├── train_xgboost_model.py        # Baseline tree-based machine learning model
 │   ├── train_improved_model.py       # Dynamic Autoregressive GBDT with lag features
 │   └── train_deep_learning_model.py  # Deep learning models (LSTM & Tabular ResNet)
+│
+├── 🖥️ Interactive Dashboard:
+│   ├── dashboard.html                # Standalone interactive research dashboard (open in any browser)
+│   └── run_dashboard.py              # One-click dashboard launcher (python run_dashboard.py)
 │
 ├── 📁 Data & Results:
 │   ├── data/raw/                     # Raw power, weather, and C3 supercomputer data
@@ -88,21 +92,34 @@ We tested 9 machine learning and deep learning modeling strategies on the held-o
 
 ## 🔍 5. Pillar 2: Ablation Study (What Features Matter?)
 
-An **Ablation Study** tests what happens to model accuracy when you deliberately remove one group of features. This tells us what the model truly cares about.
+An **Ablation Study** tests what happens to model accuracy when you deliberately isolate or remove specific feature groups. This quantifies the true marginal predictive power of each telemetry and physics pillar.
 
-We tested this systematically on the XGBoost model:
+While preliminary exploration evaluated a baseline XGBoost model, the comprehensive systematic ablation study is conducted on the project's **state-of-the-art Best Performing Models**: the **Deep Learning Tabular ResNet-MLP**, **Dynamic LightGBM**, and the **DL Hybrid Stacking Ensemble** (80% ResNet + 20% LightGBM) across all 66 engineered features.
 
-| Experiment | Features Kept | Test MAE | Test R² | What This Proves |
-| :--- | :--- | :---: | :---: | :--- |
-| **Full Model** | IT Power + Weather + Time | **8.65 kW** | **0.190** | Baseline performance with all information. |
-| **No Time Features** | IT Power + Weather | 8.60 kW | 0.164 | Time (hour/month) helps slightly, but is largely captured by weather. |
-| **No Weather** | IT Power + Time | 9.15 kW | 0.043 | Removing temperature/humidity degrades model drastically! |
-| **No IT Power** | Weather + Time | 9.08 kW | -0.086 | **Without server power, the model completely fails.** |
+### Best Model Systematic Ablation Matrix (11,055 Test Hours, 2024–2025)
 
-> **Key Takeaway**: 
-> 1. **IT Power** is the primary driver of cooling load.
-> 2. **Outdoor Weather** (ambient temperature & humidity) provides the secondary environmental forcing.
-> 3. Time features are secondary helpers.
+| Experiment | Feats | DL ResNet $R^2$ | Dynamic LGBM $R^2$ | DL Hybrid $R^2$ | Hybrid MAE | $\Delta\text{MAE}$ (%) | Physical & Domain Significance |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Full Best Model** | **66** | **0.9190** | **0.7720** | **0.9270** | **2.26 kW** | **+0.0%** | **SOTA benchmark with all physics, thermal inertia, and closed-loop feedback.** |
+| **No Autoregressive Feedback** | 52 | 0.3850 | 0.2325 | 0.3644 | 7.55 kW | +234.0% | **Exogenous Digital Twin Mode**: Pure physical prediction without chiller state feedback. |
+| **No Psychrometric Physics** | 49 | 0.9134 | 0.7839 | 0.9145 | 2.21 kW | -2.3% | Ablates wet-bulb, enthalpy & economizers; raw temp/humidity retained. |
+| **No Thermal Inertia** | 23 | 0.2142 | 0.2116 | 0.2212 | 8.36 kW | +269.8% | **Thermal memory collapse**: Multi-hour facility heat storage is essential. |
+| **No IT Workload Telemetry** | 52 | 0.9364 | 0.7911 | 0.9342 | 1.89 kW | -16.3% | In closed-loop mode, prior cooling state buffers IT load, removing IT shift noise. |
+| **No Weather Telemetry** | 34 | 0.9069 | 0.7854 | 0.9156 | 2.54 kW | +12.3% | Outdoor ambient forcing dictates chiller lift and evaporative tower efficiency. |
+| **No Calendar Harmonics** | 58 | 0.9135 | 0.7722 | 0.9242 | 2.42 kW | +6.8% | Diurnal sine/cosine harmonics provide fine periodic scheduling corrections. |
+| **Raw Baseline Features Only** | 9 | 0.0363 | 0.2250 | 0.0881 | 8.68 kW | +283.7% | **DL on raw inputs fails**: Proves neural networks require dynamic feature engineering. |
+
+### Core Scientific Discoveries:
+1. **Dynamic Closed-Loop Dispatch vs Exogenous Digital Twin ($R^2 = 0.9270$ vs $0.3644$)**:
+   * Removing past cooling state isolates the gap between capacity planning simulation ($R^2 \approx 0.36$) and real-time 1-hour ahead BMS operational control ($R^2 \approx 0.927$). In real-time dispatch, prior cooling state acts as an unobserved sensor for chiller stage sequencing and pump flow rates.
+2. **Facility Thermal Capacitance & Inertial Memory ($+269.8\%$ Error Surge)**:
+   * Removing multi-hour lag windows and rolling statistics drops $R^2$ to **0.2212**. Concrete building mass, raised floor plenums, and water loops retain heat across 1–6 hours; static instantaneous models cannot predict thermal transport dynamics.
+3. **Deep Residual Learning Requires Feature Engineering**:
+   * Tabular ResNet trained on raw unengineered telemetry plummets to $R^2 = 0.0363$. Deep neural architectures alone cannot overcome severe out-of-distribution workload shifts without thermodynamic domain physics and temporal memory.
+4. **Graceful Degradation Under Sensor Outages**:
+   * If outdoor weather station telemetry completely disconnects, the Hybrid Ensemble still delivers $R^2 = 0.9156$ (only $+12.3\%$ error increase), proving high industrial fault tolerance.
+
+*(Baseline XGBoost ablation results are also preserved in `results/tables/xgboost_ablation_results.csv` for historical reference).*
 
 ---
 
@@ -135,18 +152,26 @@ python compare_model_errors.py
 ```
 
 ### Step 3: Run Ablation Study or Cross-Dataset Validation
-Run the feature ablation study:
+Run the systematic feature ablation study:
 ```powershell
+# Runs ablation study on the best performing models (Tabular ResNet + LightGBM + Hybrid)
 python run_ablation_study.py
+
+# (Optional) Run legacy baseline XGBoost ablation
+python run_ablation_study.py --model xgboost
 ```
 Run cross-dataset validation:
 ```powershell
 python cross_dataset_validation.py
 ```
 
+### Step 4: Launch the Interactive Dashboard
+Launch the visual interactive dashboard in your web browser:
+```powershell
+python run_dashboard.py
+```
+*(Or simply double-click `dashboard.html` to open it directly in Chrome, Edge, or Firefox!)*
+
 ---
 
-## 📜 8. Research Paper
 
-For the full academic paper formatted according to IEEE conference standards (authored by **Kavya Sharma** and **Anushka Singh**), see:
-* Markdown source: [RESEARCH_PAPER_IEEE_FORMAT.md](RESEARCH_PAPER_IEEE_FORMAT.md)
